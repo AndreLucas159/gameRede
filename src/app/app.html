@@ -7,6 +7,12 @@
             <span class='text-xs font-semibold tracking-widest text-slate-400'>SIMULAÇÃO DE REDES v2.4</span>
         </div>
         <div class='flex items-center gap-6'>
+            <!-- Global Score -->
+            <div class='bg-slate-900 px-4 py-2 border border-slate-800 rounded-lg flex items-center gap-2'>
+                <span class='text-[10px] font-bold text-slate-500 uppercase tracking-wider'>Pontos:</span>
+                <span class='text-sm font-mono font-bold text-accent'>{{ score() }} pts</span>
+            </div>
+            
             <div class='flex items-center gap-3'>
                 <img [src]='currentUser().avatar' class='w-8 h-8 rounded-full border border-accent' alt="Avatar" referrerpolicy="no-referrer">
                 <div class='flex flex-col'>
@@ -18,91 +24,348 @@
                 <div class='w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-slate-400 cursor-pointer hover:bg-slate-700 hover:text-white transition-colors duration-200'>
                     <mat-icon class="text-lg">notifications</mat-icon>
                 </div>
-                <div class='w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-red-500 cursor-pointer hover:bg-red-500/20 transition-colors duration-200'>
+                <div class='w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-red-500 cursor-pointer hover:bg-red-500/20 transition-colors duration-200' (click)="resetGame()">
                     <mat-icon class="text-lg">power_settings_new</mat-icon>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Sidebar Left -->
+    <!-- Sidebar Left: Modules Navigation -->
     <aside class='bg-side flex flex-col p-4 gap-6'>
         <div class='flex flex-col gap-2'>
             <span class='text-[10px] font-bold text-slate-500 uppercase tracking-widest'>Módulos de Ensino</span>
-            <nav class='flex flex-col gap-1'>
-                <div class='p-3 rounded hover:bg-slate-800 cursor-pointer transition-colors'>
-                    <span class='text-sm font-medium text-slate-400'>01. Topologias</span>
+            <nav class='flex flex-col gap-1.5'>
+                <!-- Module 1 -->
+                <div class='p-3 rounded transition-colors duration-200 cursor-pointer'
+                     [class.bg-accent\/10]="currentStage() === 1"
+                     [class.border-l-4]="currentStage() === 1"
+                     [class.border-accent]="currentStage() === 1"
+                     [class.hover:bg-slate-800]="currentStage() !== 1 && unlockedStages().includes(1)"
+                     [class.opacity-40]="!unlockedStages().includes(1)"
+                     (click)="selectStage(1)">
+                    <div class='flex justify-between items-center'>
+                        <span class='text-sm font-medium' [class.text-white]="currentStage() === 1" [class.text-slate-400]="currentStage() !== 1">01. Topologias</span>
+                        @if (completedStages().includes(1)) {
+                            <mat-icon class="text-green-500 text-sm w-4 h-4">check_circle</mat-icon>
+                        }
+                    </div>
                 </div>
-                <div class='p-3 rounded hover:bg-slate-800 cursor-pointer transition-colors'>
-                    <span class='text-sm font-medium text-slate-400'>02. Modelo OSI</span>
+
+                <!-- Module 2 -->
+                <div class='p-3 rounded transition-colors duration-200 cursor-pointer'
+                     [class.bg-accent\/10]="currentStage() === 2"
+                     [class.border-l-4]="currentStage() === 2"
+                     [class.border-accent]="currentStage() === 2"
+                     [class.hover:bg-slate-800]="currentStage() !== 2 && unlockedStages().includes(2)"
+                     [class.opacity-40]="!unlockedStages().includes(2)"
+                     (click)="selectStage(2)">
+                    <div class='flex justify-between items-center'>
+                        <div class='flex flex-col'>
+                            <span class='text-sm font-medium' [class.text-white]="currentStage() === 2" [class.text-slate-400]="currentStage() !== 2">02. Modelo OSI / Cabo</span>
+                            @if (unlockedStages().includes(2)) {
+                                <span class='text-[9px] text-accent font-mono'>ARCADE: SNAKE</span>
+                            }
+                        </div>
+                        @if (completedStages().includes(2)) {
+                            <mat-icon class="text-green-500 text-sm w-4 h-4">check_circle</mat-icon>
+                        } @else if (!unlockedStages().includes(2)) {
+                            <span class='text-[10px] bg-slate-800 px-1 rounded text-slate-500'>LOCKED</span>
+                        }
+                    </div>
                 </div>
-                <div class='p-3 rounded hover:bg-slate-800 cursor-pointer transition-colors'>
-                    <span class='text-sm font-medium text-slate-400'>03. Sub-redes IPv4</span>
+
+                <!-- Module 3 -->
+                <div class='p-3 rounded transition-colors duration-200 cursor-pointer'
+                     [class.bg-accent\/10]="currentStage() === 3"
+                     [class.border-l-4]="currentStage() === 3"
+                     [class.border-accent]="currentStage() === 3"
+                     [class.hover:bg-slate-800]="currentStage() !== 3 && unlockedStages().includes(3)"
+                     [class.opacity-40]="!unlockedStages().includes(3)"
+                     (click)="selectStage(3)">
+                    <div class='flex justify-between items-center'>
+                        <div class='flex flex-col'>
+                            <span class='text-sm font-medium' [class.text-white]="currentStage() === 3" [class.text-slate-400]="currentStage() !== 3">03. Sub-redes IPv4</span>
+                            @if (unlockedStages().includes(3)) {
+                                <span class='text-[9px] text-accent font-mono'>ARCADE: PACMAN</span>
+                            }
+                        </div>
+                        @if (completedStages().includes(3)) {
+                            <mat-icon class="text-green-500 text-sm w-4 h-4">check_circle</mat-icon>
+                        } @else if (!unlockedStages().includes(3)) {
+                            <span class='text-[10px] bg-slate-800 px-1 rounded text-slate-500'>LOCKED</span>
+                        }
+                    </div>
                 </div>
-                <div class='p-3 rounded bg-accent/10 border-l-4 border-accent'>
-                    <span class='text-sm font-bold text-white'>04. Roteamento</span>
+
+                <!-- Module 4 -->
+                <div class='p-3 rounded transition-colors duration-200 cursor-pointer'
+                     [class.bg-accent\/10]="currentStage() === 4"
+                     [class.border-l-4]="currentStage() === 4"
+                     [class.border-accent]="currentStage() === 4"
+                     [class.hover:bg-slate-800]="currentStage() !== 4 && unlockedStages().includes(4)"
+                     [class.opacity-40]="!unlockedStages().includes(4)"
+                     (click)="selectStage(4)">
+                    <div class='flex justify-between items-center'>
+                        <span class='text-sm font-medium' [class.text-white]="currentStage() === 4" [class.text-slate-400]="currentStage() !== 4">04. Roteamento</span>
+                        @if (completedStages().includes(4)) {
+                            <mat-icon class="text-green-500 text-sm w-4 h-4">check_circle</mat-icon>
+                        } @else if (!unlockedStages().includes(4)) {
+                            <span class='text-[10px] bg-slate-800 px-1 rounded text-slate-500'>LOCKED</span>
+                        }
+                    </div>
                 </div>
-                <div class='p-3 rounded hover:bg-slate-800 cursor-pointer transition-colors flex justify-between items-center opacity-50'>
-                    <span class='text-sm font-medium text-slate-400'>05. Segurança</span>
-                    <span class='text-[10px] bg-slate-800 px-1 rounded text-slate-500'>LOCKED</span>
+
+                <!-- Module 5 -->
+                <div class='p-3 rounded transition-colors duration-200 cursor-pointer'
+                     [class.bg-accent\/10]="currentStage() === 5"
+                     [class.border-l-4]="currentStage() === 5"
+                     [class.border-accent]="currentStage() === 5"
+                     [class.hover:bg-slate-800]="currentStage() !== 5 && unlockedStages().includes(5)"
+                     [class.opacity-40]="!unlockedStages().includes(5)"
+                     (click)="selectStage(5)">
+                    <div class='flex justify-between items-center'>
+                        <span class='text-sm font-medium' [class.text-white]="currentStage() === 5" [class.text-slate-400]="currentStage() !== 5">05. Segurança</span>
+                        @if (completedStages().includes(5)) {
+                            <mat-icon class="text-green-500 text-sm w-4 h-4">check_circle</mat-icon>
+                        } @else if (!unlockedStages().includes(5)) {
+                            <span class='text-[10px] bg-slate-800 px-1 rounded text-slate-500'>LOCKED</span>
+                        }
+                    </div>
                 </div>
             </nav>
         </div>
         <div class='mt-auto p-4 bg-slate-900/50 rounded-xl border border-slate-800'>
             <span class='text-[10px] font-bold text-slate-500 uppercase block mb-2'>Progresso Global</span>
             <div class='h-1.5 w-full bg-slate-800 rounded-full overflow-hidden'>
-                <div class='h-full bg-accent w-[65%]'></div>
+                <div class='h-full bg-accent transition-all duration-300' [style.width.%]="completedStages().length * 20"></div>
             </div>
-            <span class='text-xs font-mono text-accent mt-2 block'>65% COMPLETO</span>
+            <span class='text-xs font-mono text-accent mt-2 block'>{{ completedStages().length * 20 }}% COMPLETO</span>
         </div>
     </aside>
 
-    <!-- Main Content Simulation -->
-    <main class='bg-main relative flex flex-col p-8 overflow-hidden'>
-        <div class='flex justify-between items-start mb-8'>
-            <div class='flex flex-col'>
-                <h1 class='font-display text-7xl leading-none text-white opacity-90'>ETAPA 04</h1>
-                <h2 class='text-accent font-bold tracking-widest uppercase mt-2'>Configuração de Roteadores Estáticos</h2>
-            </div>
-            <div class='bg-slate-900/80 p-4 border border-slate-800 rounded-lg backdrop-blur-sm'>
-                <span class='text-xs text-slate-500 block mb-1'>OBJETIVO ATUAL</span>
-                <p class='text-sm text-slate-200 font-medium'>Configure a rota padrão no Roteador R1 para alcançar o Gateway da Internet.</p>
-            </div>
-        </div>
-
-        <div class='flex-grow bg-slate-950/50 rounded-3xl border border-dashed border-slate-800 relative flex items-center justify-center p-8 group cursor-pointer hover:border-accent/50 transition-colors duration-300' (click)="triggerSimulation()">
-            
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity duration-300 rounded-3xl z-10">
-                <div class="bg-accent text-slate-950 px-6 py-3 rounded font-bold tracking-wider uppercase flex items-center gap-2 cursor-pointer pointer-events-none">
-                    <mat-icon>play_arrow</mat-icon>
-                    Rodar Simulação
+    <!-- Main Content -->
+    <main class='bg-main relative flex flex-col p-6 overflow-y-auto'>
+        <!-- Success State / Game Over -->
+        @if (gameOver()) {
+            <div class='flex flex-col items-center justify-center text-center h-full max-w-xl mx-auto'>
+                <div class='w-20 h-20 rounded-full bg-accent/10 border border-accent flex items-center justify-center text-4xl mb-6'>
+                    🏆
                 </div>
+                <h1 class='font-display text-4xl text-white mb-2'>CERTIFICAÇÃO CONCLUÍDA!</h1>
+                <p class='text-slate-300 mb-6'>
+                    Parabéns! Você concluiu todos os módulos de planejamento, cabeamento, lógica, roteamento e segurança com sucesso no NetQuest.
+                </p>
+                <div class='bg-slate-900 border border-slate-800 px-8 py-4 rounded-xl mb-8'>
+                    <span class='text-xs text-slate-500 uppercase tracking-widest block mb-1'>Pontuação Final</span>
+                    <span class='text-3xl font-mono font-bold text-accent'>{{ score() }} pts</span>
+                </div>
+                <button (click)="resetGame()" class='bg-accent text-slate-950 px-8 py-3 rounded font-bold uppercase tracking-wider hover:bg-cyan-300 transition-colors'>
+                    Reiniciar Simulação
+                </button>
             </div>
+        } @else if (currentPhase()) {
+            @if (!theoryRead()) {
+                <!-- Theory Slide Panel -->
+                <div class='flex flex-col items-center justify-center text-center my-auto max-w-2xl mx-auto py-8 bg-slate-900/60 p-8 rounded-2xl border border-slate-800 backdrop-blur-md animate-fade-in'>
+                    <div class='w-16 h-16 rounded-full bg-accent/10 border border-accent flex items-center justify-center text-3xl mb-4'>
+                        📖
+                    </div>
+                    <span class='text-accent font-bold tracking-widest text-xs uppercase mb-1'>Manual da Etapa 0{{ currentStage() }}</span>
+                    <h1 class='font-display text-3xl text-white mb-6'>{{ currentPhase().name }}</h1>
+                    
+                    <div class='bg-slate-950/80 border border-slate-800 px-6 py-5 rounded-xl text-left text-sm text-slate-300 leading-relaxed mb-6 font-sans whitespace-pre-line max-h-[300px] overflow-y-auto'>
+                        {{ currentPhase().theory }}
+                    </div>
+                    
+                    <button (click)="readTheory()" class='bg-accent text-slate-950 px-8 py-3 rounded font-bold uppercase tracking-wider hover:bg-cyan-300 transition-all duration-200 shadow-lg shadow-cyan-500/20 hover:scale-105 active:scale-95'>
+                        Entendi, Iniciar Desafio!
+                    </button>
+                </div>
+            } @else {
+                <div class='flex justify-between items-start mb-6'>
+                    <div class='flex flex-col'>
+                        <h1 class='font-display text-6xl leading-none text-white opacity-90'>ETAPA 0{{ currentStage() }}</h1>
+                        <h2 class='text-accent font-bold tracking-widest uppercase mt-2'>{{ currentPhase().name }}</h2>
+                    </div>
+                    <div class='bg-slate-900/80 p-4 border border-slate-800 rounded-lg max-w-md backdrop-blur-sm'>
+                        <span class='text-xs text-slate-500 block mb-1'>OBJETIVO ATUAL</span>
+                        <p class='text-xs text-slate-200 font-medium'>{{ currentPhase().description }}</p>
+                    </div>
+                </div>
 
-            <svg width='100%' height='100%' viewBox='0 0 500 300' preserveAspectRatio="xMidYMid meet">
-                <line x1='100' y1='150' x2='250' y2='150' class='node-line'/>
-                <line x1='250' y1='150' x2='400' y2='80' class='node-line'/>
-                <line x1='250' y1='150' x2='400' y2='220' class='node-line'/>
-                
-                <circle cx='100' cy='150' r='25' class='node-circle'/>
-                <circle cx='250' cy='150' r='35' class='node-circle'/>
-                <circle cx='400' cy='80' r='20' class='node-circle'/>
-                <circle cx='400' cy='220' r='20' class='node-circle'/>
-                
-                <text x='100' y='195' fill='#94a3b8' font-size='10' text-anchor='middle'>GATEWAY</text>
-                <text x='250' y='205' fill='#22d3ee' font-size='12' font-weight='bold' text-anchor='middle'>ROUTER-R1</text>
-                <text x='400' y='115' fill='#94a3b8' font-size='10' text-anchor='middle'>SWITCH-L2</text>
-                <text x='400' y='255' fill='#94a3b8' font-size='10' text-anchor='middle'>SERVER-WEB</text>
-            </svg>
+                <!-- Stage Specific Content Panels -->
+                <div class='flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6 items-start'>
+                    <!-- Instructions Column -->
+                    <div class='bg-slate-900/40 p-5 rounded-2xl border border-slate-800 flex flex-col gap-4'>
+                        <span class='text-[10px] font-bold text-slate-500 uppercase tracking-widest'>Instruções</span>
+                        
+                        @if (currentStage() === 1) {
+                            <div class='flex flex-col gap-2'>
+                                <span class='text-xs font-bold text-accent uppercase tracking-wider'>🎯 Tiro ao Alvo</span>
+                                <p class='text-xs text-slate-400'>
+                                    Acerte a resposta correta para a topologia descrita no topo do canvas. Você precisa registrar 5 acertos para avançar para a questão final desta etapa!
+                                </p>
+                            </div>
+                        } @else if (currentStage() === 2) {
+                            <!-- Cable Snake Instructions -->
+                            <div class='flex flex-col gap-2'>
+                                <span class='text-xs font-bold text-accent uppercase tracking-wider'>🐍 Tapete Mágico (T568B)</span>
+                                <p class='text-xs text-slate-400'>
+                                    Controle o tapete do Aladdin (azul) para coletar as cores de fios na sequência exata do padrão **T568B** de crimpagem. Evite colidir com as paredes ou com o próprio cabo!
+                                </p>
+                                <span class='text-[10px] font-bold text-slate-500 uppercase mt-2'>Padrão T568B:</span>
+                                <div class='flex flex-col gap-1 text-[11px] font-mono'>
+                                    @for (color of t568bOrder; let idx = $index; track color) {
+                                        <div class='flex items-center gap-2 px-2 py-1 rounded'
+                                             [class.bg-green-500\/10]="idx < snakeTargetIndex()"
+                                             [class.text-green-400]="idx < snakeTargetIndex()"
+                                             [class.bg-accent\/10]="idx === snakeTargetIndex()"
+                                             [class.text-accent]="idx === snakeTargetIndex()"
+                                             [class.text-slate-500]="idx > snakeTargetIndex()">
+                                            <span>{{ idx + 1 }}.</span>
+                                            <span>{{ color }}</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        } @else if (currentStage() === 3) {
+                            <!-- Donkey Kong Instructions -->
+                            <div class='flex flex-col gap-2'>
+                                <span class='text-xs font-bold text-accent uppercase tracking-wider'>🦍 Subnet Donkey Kong</span>
+                                <p class='text-xs text-slate-400'>
+                                    Ajude o instalador a subir as plataformas e escadas para chegar ao topo da rede de banda larga.
+                                </p>
+                                <p class='text-xs text-slate-400'>
+                                    Colete 3 IPs de hosts válidos para a rede local (em verde). **Pule por cima ou evite** os barris lançados pelo hacker que contêm IPs inválidos ou broadcasts (marrom), pois eles reduzem suas vidas!
+                                </p>
+                                <div class='bg-slate-950 p-3 rounded-lg border border-slate-800 mt-2 text-[10px] font-mono flex flex-col gap-1.5'>
+                                    <span class='text-green-400'>✔ Válidos: 192.168.10.1 a 192.168.10.254</span>
+                                    <span class='text-red-400'>✖ Inválidos: 192.168.10.255 ou 192.168.12.x</span>
+                                </div>
+                            </div>
+                        } @else if (currentStage() === 4) {
+                            <div class='flex flex-col gap-2'>
+                                <span class='text-xs font-bold text-accent uppercase tracking-wider'>🚀 Roteador Packet Shooter</span>
+                                <p class='text-xs text-slate-400'>
+                                    Aponte a rota de saída do roteador para os gateways LAN, WAN ou VPN corretos. Dispare os pacotes IP e acerte 5 gateways corretos para avançar!
+                                </p>
+                            </div>
+                        } @else if (currentStage() === 5) {
+                            <div class='flex flex-col gap-2'>
+                                <span class='text-xs font-bold text-accent uppercase tracking-wider'>🛡 Firewall Space Invaders</span>
+                                <p class='text-xs text-slate-400'>
+                                    Mova o escudo do firewall local para bloquear e destruir as ameaças virtuais (DDoS, Trojan, Worm, Spyware). Elimine 15 vírus e proteja a rede!
+                                </p>
+                            </div>
+                        }
+                    </div>
 
-            <div class='absolute bottom-6 left-6 flex gap-2 z-0'>
-                <div class='bg-accent text-slate-950 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter'>SIMULAÇÃO ATIVA</div>
-                <div class='bg-slate-800 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter'>LATENCY: {{ latency() }}</div>
-            </div>
-        </div>
+                    <!-- Interactive Game / Question Panel -->
+                    <div class='lg:col-span-2 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 flex flex-col gap-6 relative min-h-[360px]'>
+                        @if (currentStage() === 1) {
+                            @if (!arcadeCompleted()) {
+                                <div class='flex flex-col items-center justify-center w-full'>
+                                    <div class='flex justify-between items-center w-full mb-3'>
+                                        <span class='text-xs text-slate-400'>Alvos Atingidos: <strong class='text-accent'>{{ targetHits() }} / 5</strong></span>
+                                    </div>
+                                    <div class='relative border border-slate-700 bg-slate-950 rounded-xl overflow-hidden' style='width: 400px; height: 300px;'>
+                                        <canvas id='targetCanvas' width='400' height='300' (mousedown)="handleCanvasClick($event)"></canvas>
+                                        @if (arcadeGameOver()) {
+                                            <div class='absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-4 z-10'>
+                                                <span class='text-red-500 font-bold tracking-wide uppercase text-sm'>Fim de Jogo!</span>
+                                                <button (click)='initTargetGame()' class='bg-accent text-slate-950 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-cyan-300'>Tentar Novamente</button>
+                                            </div>
+                                        }
+                                    </div>
+                                    <span class='text-[10px] text-slate-500 font-mono mt-3'>CLIQUE COM O MOUSE NO ALVO DA TOPOLOGIA CORRETA</span>
+                                </div>
+                            } @else {
+                                <ng-container *ngTemplateOutlet="questionTemplate"></ng-container>
+                            }
+                        } @else if (currentStage() === 2) {
+                            <div class='flex flex-col items-center justify-center w-full'>
+                                <div class='flex justify-between items-center w-full mb-3'>
+                                    <span class='text-xs text-slate-400'>Fios Conectados: <strong class='text-accent'>{{ snakeTargetIndex() }} / 8</strong></span>
+                                    <span class='text-xs text-slate-400'>Fio Alvo: <strong class='text-green-400'>{{ t568bOrder[snakeTargetIndex()] }}</strong></span>
+                                </div>
+                                <div class='relative border border-slate-700 bg-slate-950 rounded-xl overflow-hidden' style='width: 400px; height: 300px;'>
+                                    <canvas id='snakeCanvas' width='400' height='300'></canvas>
+                                    @if (arcadeGameOver()) {
+                                        <div class='absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-4 z-10'>
+                                            <span class='text-red-500 font-bold tracking-wide uppercase text-sm'>Cabo de Rede Rompido!</span>
+                                            <button (click)='initSnakeGame()' class='bg-accent text-slate-950 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-cyan-300'>Tentar Novamente</button>
+                                        </div>
+                                    }
+                                </div>
+                                <span class='text-[10px] text-slate-500 font-mono mt-3'>USE AS SETAS (← ↑ → ↓) PARA PILOTAR O TAPETE MÁGICO</span>
+                            </div>
+                        } @else if (currentStage() === 3) {
+                            <div class='flex flex-col items-center justify-center w-full'>
+                                <div class='flex justify-between items-center w-full mb-3'>
+                                    <span class='text-xs text-slate-400'>IPs de Hosts Coletados: <strong class='text-accent'>{{ dkScore() }} / 3</strong></span>
+                                    <span class='text-xs text-slate-400'>Vidas: <strong [class.text-green-400]="dkLives() > 1" [class.text-red-500]="dkLives() <= 1">{{ dkLives() }}</strong></span>
+                                </div>
+                                <div class='relative border border-slate-700 bg-slate-950 rounded-xl overflow-hidden' style='width: 400px; height: 300px;'>
+                                    <canvas id='donkeyKongCanvas' width='400' height='300'></canvas>
+                                    @if (arcadeGameOver()) {
+                                        <div class='absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-4 z-10'>
+                                            <span class='text-red-500 font-bold tracking-wide uppercase text-sm'>Game Over! Vidas Esgotadas!</span>
+                                            <button (click)='initDonkeyKongGame()' class='bg-accent text-slate-950 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-cyan-300'>Tentar Novamente</button>
+                                        </div>
+                                    }
+                                </div>
+                                <span class='text-[10px] text-slate-500 font-mono mt-3'>SETAS (← →) CORRER | (↑ ↓) ESCALAS | ESPAÇO PARA PULAR</span>
+                            </div>
+                        } @else if (currentStage() === 4) {
+                            @if (!arcadeCompleted()) {
+                                <div class='flex flex-col items-center justify-center w-full'>
+                                    <div class='flex justify-between items-center w-full mb-3'>
+                                        <span class='text-xs text-slate-400'>Pacotes Roteados: <strong class='text-accent'>{{ routerHits() }} / 5</strong></span>
+                                    </div>
+                                    <div class='relative border border-slate-700 bg-slate-950 rounded-xl overflow-hidden' style='width: 400px; height: 300px;'>
+                                        <canvas id='routerCanvas' width='400' height='300'></canvas>
+                                        @if (arcadeGameOver()) {
+                                            <div class='absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-4 z-10'>
+                                                <span class='text-red-500 font-bold tracking-wide uppercase text-sm'>Fim de Jogo!</span>
+                                                <button (click)='initPacketShooterGame()' class='bg-accent text-slate-950 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-cyan-300'>Tentar Novamente</button>
+                                            </div>
+                                        }
+                                    </div>
+                                    <span class='text-[10px] text-slate-500 font-mono mt-3'>SETAS (← →) APONTAR ROTAS | ESPAÇO ENVIAR PACOTE</span>
+                                </div>
+                            } @else {
+                                <ng-container *ngTemplateOutlet="questionTemplate"></ng-container>
+                            }
+                        } @else if (currentStage() === 5) {
+                            @if (!arcadeCompleted()) {
+                                <div class='flex flex-col items-center justify-center w-full'>
+                                    <div class='flex justify-between items-center w-full mb-3'>
+                                        <span class='text-xs text-slate-400'>Ameaças Bloqueadas: <strong class='text-accent'>{{ invadersHits() }} / 15</strong></span>
+                                        <span class='text-xs text-slate-400'>Integridade do Firewall: <strong [class.text-green-400]="invaderShield() > 1" [class.text-red-500]="invaderShield() <= 1">{{ invaderShield() }}</strong></span>
+                                    </div>
+                                    <div class='relative border border-slate-700 bg-slate-950 rounded-xl overflow-hidden' style='width: 400px; height: 300px;'>
+                                        <canvas id='spaceInvadersCanvas' width='400' height='300'></canvas>
+                                        @if (arcadeGameOver()) {
+                                            <div class='absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-4 z-10'>
+                                                <span class='text-red-500 font-bold tracking-wide uppercase text-sm'>Firewall Derrubado por Malwares!</span>
+                                                <button (click)='initSpaceInvadersGame()' class='bg-accent text-slate-950 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-cyan-300'>Tentar Novamente</button>
+                                            </div>
+                                        }
+                                    </div>
+                                    <span class='text-[10px] text-slate-500 font-mono mt-3'>SETAS (← →) MOVER FIREWALL | ESPAÇO DISPARAR FILTROS</span>
+                                </div>
+                            } @else {
+                                <ng-container *ngTemplateOutlet="questionTemplate"></ng-container>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        }
     </main>
 
-    <!-- Sidebar Right -->
+    <!-- Sidebar Right: Chat Global -->
     <aside class='bg-side border-l border-slate-800 flex flex-col'>
         <div class='p-4 border-b border-slate-800 bg-slate-900/50'>
             <span class='text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-4'>Ranking da Turma (Tempo Real)</span>
@@ -110,10 +373,10 @@
                 @for (user of ranking(); track user.name; let idx = $index) {
                 <div class='flex items-center justify-between'>
                     <div class='flex items-center gap-2'>
-                        <span class='text-xs font-mono' [class.text-accent]="idx === 0" [class.text-slate-500]="idx !== 0">0{{ idx + 1 }}.</span>
-                        <span class='text-xs font-bold' [class.text-white]="idx === 0" [class.text-slate-400]="idx !== 0">{{ user.name }}</span>
+                        <span class='text-xs font-mono' [class.text-accent]="user.name === 'Lucas Santos'" [class.text-slate-500]="user.name !== 'Lucas Santos'">0{{ idx + 1 }}.</span>
+                        <span class='text-xs font-bold' [class.text-white]="user.name === 'Lucas Santos'" [class.text-slate-400]="user.name !== 'Lucas Santos'">{{ user.name }}</span>
                     </div>
-                    <span class='text-xs font-mono' [class.text-slate-400]="idx === 0" [class.text-slate-500]="idx !== 0">{{ user.score }} pts</span>
+                    <span class='text-xs font-mono' [class.text-accent]="user.name === 'Lucas Santos'" [class.text-slate-500]="user.name !== 'Lucas Santos'">{{ user.score }} pts</span>
                 </div>
                 }
             </div>
@@ -161,5 +424,104 @@
             <span>Session ID: LAB-204-NET</span>
         </div>
     </footer>
+
+    <ng-template #questionTemplate>
+        <!-- Simulator Stage (Multiple Choice Question) -->
+        <div class='flex flex-col gap-4 w-full'>
+            <div class='flex justify-between items-center'>
+                <span class='text-xs text-slate-500 font-semibold'>Questão do Segmento</span>
+                <div class='flex gap-2 text-[10px] font-mono'>
+                    <span class='text-green-400'>+{{ currentPhase().question.points }} pts</span>
+                    <span class='text-red-400'>-{{ currentPhase().question.penalty }} pts</span>
+                </div>
+            </div>
+            
+            <h4 class='text-base font-bold text-white'>{{ currentPhase().question.title }}</h4>
+            <p class='text-sm text-slate-300'>{{ currentPhase().question.content }}</p>
+            
+            <!-- Options Grid -->
+            <div class='flex flex-col gap-2 mt-2'>
+                @for (opt of currentPhase().question.options | keyvalue; track opt.key) {
+                    <button 
+                        class='flex items-center gap-3 px-4 py-3 rounded-lg border text-left text-xs transition-all duration-150'
+                        [disabled]='feedbackActive()'
+                        [class.bg-slate-950]='selectedOptionKey() !== opt.key && correctAnswerToShow() !== opt.key'
+                        [class.border-slate-800]='selectedOptionKey() !== opt.key && correctAnswerToShow() !== opt.key'
+                        [class.text-slate-400]='selectedOptionKey() !== opt.key && correctAnswerToShow() !== opt.key'
+                        
+                        [class.bg-accent\/10]='selectedOptionKey() === opt.key && !feedbackActive()'
+                        [class.border-accent]='selectedOptionKey() === opt.key && !feedbackActive()'
+                        [class.text-accent]='selectedOptionKey() === opt.key && !feedbackActive()'
+                        
+                        [class.bg-green-500\/10]='feedbackActive() && (opt.key === correctAnswerToShow())'
+                        [class.border-green-500]='feedbackActive() && (opt.key === correctAnswerToShow())'
+                        [class.text-green-400]='feedbackActive() && (opt.key === correctAnswerToShow())'
+                        
+                        [class.bg-red-500\/10]='feedbackActive() && selectedOptionKey() === opt.key && !feedbackIsCorrect()'
+                        [class.border-red-500]='feedbackActive() && selectedOptionKey() === opt.key && !feedbackIsCorrect()'
+                        [class.text-red-400]='feedbackActive() && selectedOptionKey() === opt.key && !feedbackIsCorrect()'
+                        
+                        (click)='selectOption(opt.key)'
+                    >
+                        <span class='font-mono font-bold px-2 py-1 rounded bg-slate-900 border border-slate-700'
+                              [class.text-green-400]="feedbackActive() && (opt.key === correctAnswerToShow())"
+                              [class.text-red-400]="feedbackActive() && selectedOptionKey() === opt.key && !feedbackIsCorrect()">
+                            {{ opt.key }}
+                        </span>
+                        <span class='flex-grow'>{{ opt.value }}</span>
+                    </button>
+                }
+            </div>
+
+            <!-- Feedback Banner & Retry Mechanics -->
+            @if (feedbackActive()) {
+                <div class='p-3.5 rounded-lg border text-xs mt-3 flex flex-col gap-2'
+                     [class.bg-green-500\/10]='feedbackIsCorrect()'
+                     [class.border-green-500\/20]='feedbackIsCorrect()'
+                     [class.text-green-400]='feedbackIsCorrect()'
+                     [class.bg-red-500\/10]='!feedbackIsCorrect()'
+                     [class.border-red-500\/20]='!feedbackIsCorrect()'
+                     [class.text-red-400]='!feedbackIsCorrect()'>
+                    <div class='flex items-center gap-2'>
+                        <mat-icon class='text-base w-4 h-4'>{{ feedbackIsCorrect() ? 'check_circle' : 'cancel' }}</mat-icon>
+                        @if (feedbackIsCorrect()) {
+                            <span>**Correto!** Você concluiu a etapa perfeitamente e adicionou pontos ao seu saldo.</span>
+                        } @else {
+                            <span>**Incorreto!** Resposta correta: **{{ correctAnswerToShow() }}**. Ocorreu uma penalidade de pontos.</span>
+                        }
+                    </div>
+                    
+                    <!-- If incorrect, show retry option -->
+                    @if (!feedbackIsCorrect()) {
+                        <div class='mt-2 flex items-center justify-between border-t border-red-500/20 pt-2'>
+                            <span class='text-[10px] text-red-300 font-mono'>Tentativa número {{ retryCount() + 1 }} (Penalidade cumulativa de 25%)</span>
+                            <button (click)='tryAgain()' class='bg-red-950 hover:bg-red-900 border border-red-500 text-white font-mono text-[10px] px-3 py-1 rounded transition-colors'>
+                                Tentar Novamente
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+
+            <!-- Actions Footer -->
+            <div class='flex justify-end gap-2 mt-4 border-t border-slate-800/50 pt-4'>
+                @if (!feedbackActive()) {
+                    <button 
+                        [disabled]='!selectedOptionKey()'
+                        (click)='submitAnswer()'
+                        class='bg-accent text-slate-950 px-6 py-2.5 rounded font-bold uppercase tracking-wider text-xs hover:bg-cyan-300 disabled:opacity-30 disabled:pointer-events-none transition-colors'
+                    >
+                        Confirmar Escolha
+                    </button>
+                } @else if (feedbackIsCorrect()) {
+                    <button 
+                        (click)='nextQuestion()'
+                        class='bg-accent text-slate-950 px-6 py-2.5 rounded font-bold uppercase tracking-wider text-xs hover:bg-cyan-300 transition-colors'
+                    >
+                        {{ currentStage() === 5 ? 'Finalizar Certificação' : 'Avançar de Módulo' }}
+                    </button>
+                }
+            </div>
+        </div>
+    </ng-template>
 </div>
-<router-outlet />
